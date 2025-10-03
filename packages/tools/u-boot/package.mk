@@ -24,6 +24,15 @@ fi
 PKG_NEED_UNPACK="${PROJECT_DIR}/${PROJECT}/bootloader"
 [ -n "${DEVICE}" ] && PKG_NEED_UNPACK+=" ${PROJECT_DIR}/${PROJECT}/devices/${DEVICE}/bootloader"
 
+post_unpack() {
+  # Create phicomm-n1_defconfig
+  if [ "${UBOOT_SYSTEM}" = "box-phicomm-n1" ]; then
+    cp ${PKG_BUILD}/configs/libretech-cc_defconfig ${PKG_BUILD}/configs/phicomm-n1_defconfig
+    sed -i 's/meson-gxl-s905x-libretech-cc/meson-gxl-s905d-phicomm-n1/g' ${PKG_BUILD}/configs/phicomm-n1_defconfig
+    sed -i 's/libretech-cc/phicomm-n1/g' ${PKG_BUILD}/configs/phicomm-n1_defconfig
+  fi
+}
+
 post_patch() {
   if [ -n "${UBOOT_SYSTEM}" ] && find_file_path bootloader/config; then
     PKG_CONFIG_FILE="${PKG_BUILD}/configs/$(${ROOT}/${SCRIPTS}/uboot_helper ${PROJECT} ${DEVICE} ${UBOOT_SYSTEM} config)"

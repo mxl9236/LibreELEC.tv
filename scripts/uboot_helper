@@ -164,6 +164,10 @@ devices = \
         'dtb': '',
         'config': 'p212_defconfig'
       },
+      'box-phicomm-n1': {
+        'dtb': 'meson-gxl-s905d-phicomm-n1.dtb',
+        'config': 'phicomm-n1_defconfig'
+      },
       'alta': {
         'dtb': 'meson-g12b-a311d-libretech-cc.dtb',
         'config': 'aml-a311d-cc_defconfig'

@@ -61,6 +61,27 @@ mkimage_dtb(){
   mcopy -s -o "${RELEASE_DIR}/3rdparty/bootloader/amlogic" ::
 }
 
+mkimage_n1(){
+  echo "image: copying autoscript files"
+  mcopy -s -o ${RELEASE_DIR}/3rdparty/bootloader/*script ::
+
+  echo "image: copying exlinux.conf"
+  mkdir -p "${LE_TMP}/extlinux"
+  cat << EOF > "${LE_TMP}/extlinux/extlinux.conf"
+LABEL ${DISTRO}
+  LINUX /${KERNEL_NAME}
+  FDT /${DTB}
+  APPEND boot=LABEL=${DISTRO_BOOTLABEL} disk=LABEL=${DISTRO_DISKLABEL} quiet ${EXTRA_CMDLINE}
+EOF
+  mcopy -s -o "${LE_TMP}/extlinux" ::
+
+  echo "image: copying u-boot to $(basename $DISK)"
+  mcopy -s -o ${INSTALL}/usr/share/bootloader/u-boot.bin ::u-boot.ext
+
+  echo "image: copying device trees"
+  mcopy -s -o "${RELEASE_DIR}/3rdparty/bootloader/amlogic/${DTB}" ::
+}
+
 case "${UBOOT_SYSTEM}" in
   box|"")
     DTB="@@DTB_NAME@@"
@@ -68,6 +89,9 @@ case "${UBOOT_SYSTEM}" in
     mkimage_autoscripts
     mkimage_bootini
     mkimage_dtb
+    ;;
+  box-phicomm-n1)
+    mkimage_n1
     ;;
   odroid-n2|odroid-c4)
     mkimage_uboot

@@ -12,6 +12,9 @@ case "${UBOOT_SYSTEM}" in
   box|"")
     # no-op, use vendor bootloader
     ;;
+  box-phicomm-n1)
+    cp -av "$(get_build_dir "${BOOTLOADER}")/u-boot.bin" "${DESTDIR}"
+    ;;
   *)
     mkdir "${DESTDIR}/tmp"
     (cd "${FIPDIR}" || exit; ./build-fip.sh "${UBOOT_SYSTEM}" "$(get_build_dir "${BOOTLOADER}")/u-boot.bin" "${DESTDIR}" "${DESTDIR}/tmp")

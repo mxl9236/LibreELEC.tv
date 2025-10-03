@@ -1,0 +1,36 @@
+From cde1d14ad33a3ae848f9f98695dd225cefa4c74d Mon Sep 17 00:00:00 2001
+From: mxl9236 <mxl9236@gmail.com>
+Date: Sat, 4 Oct 2025 02:11:03 +0800
+Subject: [PATCH] fix dts for phicomm n1
+
+---
+ .../dts/amlogic/meson-gxl-s905d-phicomm-n1.dts   | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts b/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts
+index 393d3cb33..2d24e157f 100644
+--- a/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts
++++ b/arch/arm64/boot/dts/amlogic/meson-gxl-s905d-phicomm-n1.dts
+@@ -33,3 +33,19 @@ &cvbs_vdac_port {
+ &usb {
+ 	dr_mode = "host";
+ };
++
++/* This is connected to the Bluetooth module: */
++&uart_A {
++	status = "okay";
++	pinctrl-0 = <&uart_a_pins>, <&uart_a_cts_rts_pins>;
++	pinctrl-names = "default";
++	uart-has-rtscts;
++
++	bluetooth {
++		compatible = "brcm,bcm43438-bt";
++		shutdown-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
++		max-speed = <2000000>;
++		clocks = <&wifi32k>;
++		clock-names = "lpo";
++	};
++};
+-- 
+2.43.0
+
